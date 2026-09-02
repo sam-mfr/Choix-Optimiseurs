@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b7a55">
+<meta name="theme-color" content="#1769aa">
 <title>Choix Optimiseurs</title>
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;background:#f4f7f6;color:#14221d}
-header{background:#0b7a55;color:white;padding:22px 18px 20px;border-radius:0 0 24px 24px;box-shadow:0 4px 14px #0001}
+header{background:#1769aa;color:white;padding:22px 18px 20px;border-radius:0 0 24px 24px;box-shadow:0 4px 14px #0001}
 h1{font-size:25px;margin:0 0 5px}.sub{opacity:.85;font-size:14px}
 main{max-width:720px;margin:auto;padding:16px 14px 32px}
 .card{background:white;border-radius:18px;padding:15px;margin:12px 0;box-shadow:0 2px 10px #0000000d}
@@ -17,12 +17,23 @@ main{max-width:720px;margin:auto;padding:16px 14px 32px}
 .pan:last-child{border-bottom:0}.pan-label{font-weight:700}
 select,input{width:100%;border:1px solid #d9e1dd;border-radius:11px;padding:11px 8px;background:#fff;font-size:16px}
 input{text-align:center}.delete{border:0;background:#f1f4f3;border-radius:10px;font-size:18px;height:42px}
-button{border:0;border-radius:12px;padding:12px 15px;font-size:16px;font-weight:700}.add{margin-top:12px;width:100%;background:#e4f3ed;color:#086d4c}
-.toggle{display:flex;gap:10px}.toggle button{flex:1;background:#eef2f0;color:#53635c}.toggle .active{background:#0b7a55;color:white}
+button{border:0;border-radius:12px;padding:12px 15px;font-size:16px;font-weight:700}.add{margin-top:12px;width:100%;background:#e7f1f9;color:#145b8f}
+.toggle{display:flex;gap:10px}.toggle button{flex:1;background:#edf3f8;color:#526575}.toggle .active{background:#1769aa;color:white}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f7faf8;border-radius:14px;padding:13px}.metric small{display:block;color:#65746e;font-size:13px}.metric b{font-size:25px}
 .result{display:flex;justify-content:space-between;align-items:center}.pill{padding:7px 11px;border-radius:999px;font-weight:800;font-size:13px}.yes{background:#fff0d9;color:#9b5c00}.no{background:#e1f6ec;color:#08724d}
-.reason{font-size:13px;color:#66746e;margin-top:6px}.reset{width:100%;background:#eef2f0;color:#34443d;margin-top:4px}
+.reason{font-size:13px;color:#66746e;margin-top:6px}.reset{width:100%;background:#edf3f8;color:#34443d;margin-top:4px}
 @media(max-width:430px){.pan{grid-template-columns:52px 1fr 65px 32px;gap:6px}}
+
+header{background:linear-gradient(135deg,#1769aa,#2b82c9);padding:25px 18px 23px;box-shadow:0 5px 18px #1769aa33}
+.card{border:1px solid #e5edf3;box-shadow:0 3px 14px #16324a0d;padding:17px}
+.section-title{letter-spacing:.1px}
+select,input{border-color:#d5e1ea;box-shadow:inset 0 1px 2px #00000008}
+.pan{padding:11px 0}
+.delete{transition:.15s}.delete:active{transform:scale(.94)}
+button{transition:transform .12s}.add:active,.reset:active{transform:scale(.98)}
+.result strong{font-size:20px}
+
+.shareBtn{width:100%;margin-top:10px;background:#1769aa;color:white;border-radius:12px;padding:12px 15px;font-size:16px;font-weight:700;border:0}
 </style>
 </head>
 <body>
@@ -64,12 +75,13 @@ button{border:0;border-radius:12px;padding:12px 15px;font-size:16px;font-weight:
 <div id="triReason" class="reason"></div>
 </section>
 
+<button class="shareBtn" onclick="shareResult()">↗ Partager le résultat</button>
 <button class="reset" onclick="resetApp()">Réinitialiser</button>
 </main>
 
 <script>
 const orientations=["","N","NE","E","SE","S","SO","O","NO"];
-let pans=[{o:"",n:""},{o:"",n:""}], shade=false;
+let pans=[{o:"",n:""}], shade=false;
 
 function addPan(){if(pans.length<8){pans.push({o:"",n:""});render()}}
 function delPan(i){pans.splice(i,1);render()}
@@ -105,9 +117,21 @@ function calc(){
  document.getElementById("monoReason").textContent=reason(monoOpt,shade,ori>mono,monoSmall,4);
  document.getElementById("triReason").textContent=reason(triOpt,shade,ori>tri,triSmall,5);
 }
+
+function shareResult(){
+ const t=`☀️ Choix Optimiseurs
+Modules totaux : ${document.getElementById("total").textContent}
+Orientations : ${document.getElementById("orients").textContent}
+MONO : ${document.getElementById("monoChains").textContent} chaînes — optimiseurs ${document.getElementById("monoOpt").textContent}
+TRI : ${document.getElementById("triChains").textContent} chaînes — optimiseurs ${document.getElementById("triOpt").textContent}`;
+ if(navigator.share){navigator.share({title:"Choix Optimiseurs",text:t}).catch(()=>{});}
+ else if(navigator.clipboard){navigator.clipboard.writeText(t);alert("Résumé copié.");}
+ else{alert(t);}
+}
+
 function setPill(id,v){const e=document.getElementById(id);e.textContent=v?"OUI":"NON";e.className="pill "+(v?"yes":"no")}
 function reason(v,sh,many,small,t){if(!v)return "Configuration compatible avec le fonctionnement standard.";let r=[];if(sh)r.push("ombrage");if(many)r.push("plus d’orientations que de chaînes");if(small)r.push("pan inférieur à "+t+" modules");return "Optimiseurs recommandés : "+r.join(" + ")+ "."}
-function resetApp(){pans=[{o:"",n:""},{o:"",n:""}];shade=false;render()}
+function resetApp(){pans=[{o:"",n:""}];shade=false;render()}
 render();
 </script>
 </body>
