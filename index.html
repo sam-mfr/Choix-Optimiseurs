@@ -1,114 +1,69 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b7a55">
-<title>Choix Optimiseurs</title>
-<link rel="manifest" href="manifest.json">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#087f5b"><title>Choix Optimiseurs</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;background:#f4f7f6;color:#14221d}
-header{background:#0b7a55;color:white;padding:22px 18px 20px;border-radius:0 0 24px 24px;box-shadow:0 4px 14px #0001}
-h1{font-size:25px;margin:0 0 5px}.sub{opacity:.85;font-size:14px}
-main{max-width:720px;margin:auto;padding:16px 14px 32px}
-.card{background:white;border-radius:18px;padding:15px;margin:12px 0;box-shadow:0 2px 10px #0000000d}
-.section-title{font-weight:750;font-size:17px;margin-bottom:10px}
-.pan{display:grid;grid-template-columns:58px 1fr 76px 34px;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #edf1ef}
-.pan:last-child{border-bottom:0}.pan-label{font-weight:700}
-select,input{width:100%;border:1px solid #d9e1dd;border-radius:11px;padding:11px 8px;background:#fff;font-size:16px}
-input{text-align:center}.delete{border:0;background:#f1f4f3;border-radius:10px;font-size:18px;height:42px}
-button{border:0;border-radius:12px;padding:12px 15px;font-size:16px;font-weight:700}.add{margin-top:12px;width:100%;background:#e4f3ed;color:#086d4c}
-.toggle{display:flex;gap:10px}.toggle button{flex:1;background:#eef2f0;color:#53635c}.toggle .active{background:#0b7a55;color:white}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f7faf8;border-radius:14px;padding:13px}.metric small{display:block;color:#65746e;font-size:13px}.metric b{font-size:25px}
-.result{display:flex;justify-content:space-between;align-items:center}.pill{padding:7px 11px;border-radius:999px;font-weight:800;font-size:13px}.yes{background:#fff0d9;color:#9b5c00}.no{background:#e1f6ec;color:#08724d}
-.reason{font-size:13px;color:#66746e;margin-top:6px}.reset{width:100%;background:#eef2f0;color:#34443d;margin-top:4px}
-@media(max-width:430px){.pan{grid-template-columns:52px 1fr 65px 32px;gap:6px}}
-</style>
-</head>
+*{box-sizing:border-box}body{margin:0;background:#f3f6f5;color:#14231d;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif}
+header{background:#087f5b;color:#fff;padding:24px 16px 22px;border-radius:0 0 26px 26px}.wrap{max-width:720px;margin:auto}h1{margin:0;font-size:27px}.sub{opacity:.86;margin-top:5px;font-size:14px}
+main{padding:14px;max-width:720px;margin:auto}.card{background:#fff;border-radius:20px;padding:16px;margin-bottom:13px;box-shadow:0 2px 12px #0000000b}
+.title{font-weight:800;font-size:17px;margin-bottom:12px}.hint{font-size:12px;color:#708079;margin-top:8px}
+.roof{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.roof button{min-height:65px;border:1px solid #dce6e1;background:#f7faf8;border-radius:14px;color:#20332b}.roof button.active{border:2px solid #087f5b;background:#e6f6ef}
+.roof b{display:block;font-size:13px}.roof span{font-size:11px;color:#64736d}
+.pan{display:grid;grid-template-columns:54px 1fr 82px 36px;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid #edf1ef}.pan:last-child{border-bottom:0}.lab{font-weight:750}
+select,input{font:inherit;width:100%;height:44px;border:1px solid #d7e1dc;border-radius:12px;background:#fff;padding:0 9px}input{text-align:center}.del{height:44px;border:0;border-radius:12px;background:#f0f3f2;font-size:21px}
+.add,.share,.reset{width:100%;height:46px;border:0;border-radius:13px;font:inherit;font-weight:800}.add{background:#e3f4ed;color:#087f5b}.share{background:#087f5b;color:#fff;margin-top:8px}.reset{background:#edf1ef;color:#34463e;margin-top:8px}
+.toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px}.toggle button{height:44px;border:0;border-radius:12px;background:#eef2f0;font-weight:800}.toggle .on{background:#087f5b;color:#fff}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric{background:#f7faf8;border-radius:15px;padding:13px}.metric small{display:block;color:#687770}.metric b{font-size:27px}
+.result{display:flex;justify-content:space-between;align-items:center;padding:5px 0}.pill{padding:7px 12px;border-radius:999px;font-size:13px;font-weight:900}.yes{background:#fff0d5;color:#945900}.no{background:#e1f5ec;color:#08704d}.why{font-size:13px;color:#64736d;margin-top:7px;line-height:1.35}
+.reco{padding:13px;border-radius:15px;font-weight:800;margin-bottom:10px}.ok{background:#e1f5ec;color:#08704d}.warn{background:#fff0d5;color:#945900}
+@media(max-width:420px){.pan{grid-template-columns:50px 1fr 70px 32px}.roof{grid-template-columns:repeat(4,1fr)}}
+</style></head>
 <body>
-<header><h1>☀️ Choix Optimiseurs</h1><div class="sub">Calcul rapide de configuration photovoltaïque</div></header>
+<header><div class="wrap"><h1>☀️ Choix Optimiseurs</h1><div class="sub">Assistant photovoltaïque · V3 chantier</div></div></header>
 <main>
-<section class="card">
-<div class="section-title">Configuration des pans</div>
-<div id="pans"></div>
-<button class="add" onclick="addPan()">＋ Ajouter un pan</button>
-</section>
-
-<section class="card">
-<div class="section-title">Ombrages</div>
-<div class="toggle">
-<button id="ombreNon" onclick="setShade(false)">NON</button>
-<button id="ombreOui" onclick="setShade(true)">OUI</button>
-</div>
-</section>
-
-<section class="card">
-<div class="section-title">Installation</div>
-<div class="grid">
-<div class="metric"><small>Modules totaux</small><b id="total">0</b></div>
-<div class="metric"><small>Orientations</small><b id="orients">0</b></div>
-</div>
-</section>
-
-<section class="card">
-<div class="section-title">MONO</div>
-<div class="result"><span>Chaînes de 11</span><strong id="monoChains">0</strong></div>
-<div class="result" style="margin-top:12px"><span>Optimiseurs</span><span id="monoOpt" class="pill no">NON</span></div>
-<div id="monoReason" class="reason"></div>
-</section>
-
-<section class="card">
-<div class="section-title">TRI</div>
-<div class="result"><span>Chaînes de 13</span><strong id="triChains">0</strong></div>
-<div class="result" style="margin-top:12px"><span>Optimiseurs</span><span id="triOpt" class="pill no">NON</span></div>
-<div id="triReason" class="reason"></div>
-</section>
-
-<button class="reset" onclick="resetApp()">Réinitialiser</button>
+<section class="card"><div class="title">Configuration des pans <span id="counter" style="float:right;color:#718078;font-size:13px"></span></div><div id="roof" class="roof"></div><div id="pans"></div><button class="add" onclick="addPan()">＋ Ajouter un pan</button><div class="hint">Renseigne uniquement les pans présents sur l'installation.</div></section>
+<section class="card"><div class="title">Ombrages</div><div class="toggle"><button id="shadeNo" onclick="shade=false;render()">NON</button><button id="shadeYes" onclick="shade=true;render()">OUI</button></div></section>
+<section class="card"><div class="title">Synthèse chantier</div><div id="recommendation" class="reco"></div><div class="metrics"><div class="metric"><small>Modules totaux</small><b id="total">0</b></div><div class="metric"><small>Orientations</small><b id="ori">0</b></div></div></section>
+<section class="card"><div class="title">Résultat MONO</div><div class="result"><span>Chaînes de 11</span><b id="monoChains">0</b></div><div class="result"><span>Optimiseurs</span><span id="mono" class="pill">NON</span></div><div id="monoWhy" class="why"></div></section>
+<section class="card"><div class="title">Résultat TRI</div><div class="result"><span>Chaînes de 13</span><b id="triChains">0</b></div><div class="result"><span>Optimiseurs</span><span id="tri" class="pill">NON</span></div><div id="triWhy" class="why"></div></section>
+<button class="share" onclick="share()">↗ Partager le résumé</button><button class="reset" onclick="resetApp()">Réinitialiser</button>
 </main>
-
 <script>
-const orientations=["","N","NE","E","SE","S","SO","O","NO"];
-let pans=[{o:"",n:""},{o:"",n:""}], shade=false;
-
+const dirs=["","N","NE","E","SE","S","SO","O","NO"];
+let pans=[{o:"SE",n:"9"},{o:"NO",n:"9"}],shade=false;
 function addPan(){if(pans.length<8){pans.push({o:"",n:""});render()}}
-function delPan(i){pans.splice(i,1);render()}
-function setShade(v){shade=v;render()}
+function del(i){pans.splice(i,1);if(!pans.length)pans=[{o:"",n:""}];render()}
+function exactExcelOptimiseurs(threshold,chains){
+  // Reproduit la formule Excel =IF(OR(G2="Oui",G5>G8,C2:C9<threshold),"OUI","NON")
+  // Dans Excel, une cellule vide de C2:C9 comparée à un nombre est traitée comme 0.
+  const hasEmpty=pans.length<8 || pans.some(p=>p.n==="" || p.n===null || p.n===undefined);
+  const small=pans.some(p=>(parseInt(p.n)||0)<threshold);
+  return shade || orientationCount()>chains || hasEmpty || small;
+}
+function orientationCount(){return new Set(pans.map(p=>p.o).filter(Boolean)).size}
+function calc(){
+ const total=pans.reduce((a,p)=>a+(parseInt(p.n)||0),0), ori=orientationCount();
+ const mono=Math.ceil(total/11),tri=Math.ceil(total/13);
+ const mo=exactExcelOptimiseurs(4,mono),to=exactExcelOptimiseurs(5,tri);
+ document.getElementById("total").textContent=total;document.getElementById("ori").textContent=ori;
+ document.getElementById("monoChains").textContent=mono;document.getElementById("triChains").textContent=tri;
+ pill("mono",mo);pill("tri",to);
+ document.getElementById("monoWhy").textContent=why(mo,4,mono);
+ document.getElementById("triWhy").textContent=why(to,5,tri);
+ const rec=document.getElementById("recommendation"), any=mo||to;
+ rec.className="reco "+(any?"warn":"ok");rec.textContent=any?"🟠 Optimiseurs : OUI selon la logique du fichier Excel.":"🟢 Optimiseurs : NON.";
+}
+function why(v,t,ch){if(!v)return"Configuration compatible avec les critères du fichier Excel.";let r=[];if(shade)r.push("ombrages = Oui");if(orientationCount()>ch)r.push("plus d'orientations que de chaînes");if(pans.length<8||pans.some(p=>p.n===""||p.n==null))r.push("pan(s) non renseigné(s)");if(pans.some(p=>(parseInt(p.n)||0)<t))r.push("au moins un pan sous "+t+" modules");return "Déclencheur : "+r.join(" · ")+"."}
+function pill(id,v){const e=document.getElementById(id);e.textContent=v?"OUI":"NON";e.className="pill "+(v?"yes":"no")}
 function render(){
- const box=document.getElementById("pans");
- box.innerHTML=pans.map((p,i)=>`
- <div class="pan">
-   <div class="pan-label">Pan ${i+1}</div>
-   <select onchange="pans[${i}].o=this.value;calc()">
-   ${orientations.map(o=>`<option value="${o}" ${o===p.o?"selected":""}>${o||"—"}</option>`).join("")}
-   </select>
-   <input type="number" min="0" inputmode="numeric" placeholder="Modules" value="${p.n}" onchange="pans[${i}].n=this.value;calc()">
-   <button class="delete" onclick="delPan(${i})">×</button>
- </div>`).join("");
- document.getElementById("ombreNon").className=shade?"":"active";
- document.getElementById("ombreOui").className=shade?"active":"";
+ document.getElementById("counter").textContent=pans.length+" / 8";
+ document.getElementById("pans").innerHTML=pans.map((p,i)=>`<div class="pan"><div class="lab">Pan ${i+1}</div><select onchange="pans[${i}].o=this.value;calc()">${dirs.map(d=>`<option value="${d}" ${d===p.o?"selected":""}>${d||"—"}</option>`).join("")}</select><input type="number" min="0" inputmode="numeric" placeholder="Modules" value="${p.n}" onchange="pans[${i}].n=this.value;calc()"><button class="del" onclick="del(${i})">×</button></div>`).join("");
+ document.getElementById("roof").innerHTML=pans.map((p,i)=>`<button class="${p.o||p.n?'active':''}" onclick="document.getElementById('pans').children[${i}].scrollIntoView({behavior:'smooth',block:'center'})"><b>Pan ${i+1}</b><span>${p.o||"—"} · ${p.n||0} mod.</span></button>`).join("");
+ document.getElementById("shadeNo").className=shade?"":"on";document.getElementById("shadeYes").className=shade?"on":"";
  calc();
 }
-function calc(){
- const nums=pans.map(p=>parseInt(p.n)||0).filter(n=>n>0);
- const total=nums.reduce((a,b)=>a+b,0);
- const ori=new Set(pans.map(p=>p.o).filter(Boolean)).size;
- const mono=Math.ceil(total/11), tri=Math.ceil(total/13);
- const monoSmall=pans.some(p=>{let n=parseInt(p.n)||0;return n>0&&n<4});
- const triSmall=pans.some(p=>{let n=parseInt(p.n)||0;return n>0&&n<5});
- const monoOpt=shade||ori>mono||monoSmall, triOpt=shade||ori>tri||triSmall;
- document.getElementById("total").textContent=total;
- document.getElementById("orients").textContent=ori;
- document.getElementById("monoChains").textContent=mono;
- document.getElementById("triChains").textContent=tri;
- setPill("monoOpt",monoOpt); setPill("triOpt",triOpt);
- document.getElementById("monoReason").textContent=reason(monoOpt,shade,ori>mono,monoSmall,4);
- document.getElementById("triReason").textContent=reason(triOpt,shade,ori>tri,triSmall,5);
-}
-function setPill(id,v){const e=document.getElementById(id);e.textContent=v?"OUI":"NON";e.className="pill "+(v?"yes":"no")}
-function reason(v,sh,many,small,t){if(!v)return "Configuration compatible avec le fonctionnement standard.";let r=[];if(sh)r.push("ombrage");if(many)r.push("plus d’orientations que de chaînes");if(small)r.push("pan inférieur à "+t+" modules");return "Optimiseurs recommandés : "+r.join(" + ")+ "."}
+function share(){const t=`☀️ Choix Optimiseurs\nModules : ${total.textContent}\nOrientations : ${ori.textContent}\nMONO : ${monoChains.textContent} chaînes · optimiseurs ${mono.textContent}\nTRI : ${triChains.textContent} chaînes · optimiseurs ${tri.textContent}`;navigator.share?navigator.share({title:"Choix Optimiseurs",text:t}):navigator.clipboard?.writeText(t)}
 function resetApp(){pans=[{o:"",n:""},{o:"",n:""}];shade=false;render()}
 render();
-</script>
-</body>
-</html>
+</script></body></html>
