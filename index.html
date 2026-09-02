@@ -35,16 +35,23 @@ button{transition:transform .12s}.add:active,.reset:active{transform:scale(.98)}
 
 .shareBtn{width:100%;margin-top:10px;background:#1769aa;color:white;border-radius:12px;padding:12px 15px;font-size:16px;font-weight:700;border:0}
 
-.roof3d-card{background:linear-gradient(145deg,#f8fbfd,#edf4f8);border:1px solid #dce8f0;border-radius:18px;padding:12px;overflow:hidden}
-.roof3d{height:255px;position:relative;perspective:900px;overflow:hidden;border-radius:14px;background:linear-gradient(#dcebf5 0 58%,#cfdadf 58% 100%)}
-.roof3d-ground{position:absolute;left:-15%;right:-15%;bottom:-25px;height:115px;background:#bfcbd0;transform:rotateX(68deg);transform-origin:center bottom;border-radius:50%}
-.roof3d-scene{position:absolute;inset:15px 8px 30px;transform-style:preserve-3d;transform:rotateX(55deg) rotateZ(-4deg);display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:16px}
-.roof3d-pan{position:relative;width:140px;height:80px;transform-style:preserve-3d;transform:skewX(-10deg);background:#66747c;border:3px solid #536169;border-radius:4px;box-shadow:7px 9px 0 #8e9aa0;overflow:hidden}
-.roof3d-pan .cells{position:absolute;inset:3px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);gap:2px;background:#263a48}
-.roof3d-pan .cell{background:linear-gradient(145deg,#4e6f84,#243c4b);border:1px solid #6d8796}
-.roof3d-label{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotateX(-55deg) rotateZ(4deg) skewX(10deg);z-index:5;color:white;text-shadow:0 1px 3px #000;font-weight:800;font-size:12px;white-space:nowrap}
-.roof3d-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#60717c;font-size:14px;font-weight:700}
-.roof3d-legend{display:flex;justify-content:space-between;font-size:12px;color:#64747e;margin-top:8px}
+/* Vue 2D des pans, avec orientation */
+.roof2d-card{background:#f7fafc;border:1px solid #dce7ef;border-radius:18px;padding:12px}
+.roof2d{position:relative;min-height:270px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px;padding:18px}
+.roof2d-pan{position:relative;width:150px;min-height:105px;background:#dbe5eb;border:3px solid #8ea2ad;border-radius:8px;box-shadow:0 4px 0 #b8c5cc;display:flex;flex-direction:column;align-items:center;padding:9px}
+.roof2d-pan[data-dir="N"],.roof2d-pan[data-dir="S"]{background:#e4edf2}
+.roof2d-pan[data-dir="E"],.roof2d-pan[data-dir="O"]{background:#dcebf5}
+.roof2d-pan[data-dir="NE"],.roof2d-pan[data-dir="NO"],.roof2d-pan[data-dir="SE"],.roof2d-pan[data-dir="SO"]{background:#e7f1f8}
+.roof2d-title{font-weight:850;font-size:13px;margin-bottom:7px}
+.modules{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.module{height:12px;background:#3d6680;border:1px solid #7892a2;border-radius:1px}
+.module.off{opacity:.12}
+.roof2d-info{font-size:11px;font-weight:750;color:#50626e;margin-top:7px}
+.roof2d-compass{position:absolute;top:5px;right:8px;width:70px;height:70px;font-size:10px;color:#50626e;text-align:center}
+.roof2d-compass:before{content:"";position:absolute;left:31px;top:13px;height:42px;border-left:2px solid #1769aa}
+.roof2d-compass:after{content:"N";position:absolute;left:27px;top:0;font-weight:900;color:#1769aa}
+.roof2d-empty{min-height:230px;display:flex;align-items:center;justify-content:center;color:#667780;font-weight:700;font-size:14px;text-align:center}
+.roof2d-legend{font-size:12px;color:#687780;text-align:center;margin-top:5px}
 </style>
 </head>
 <body>
@@ -55,10 +62,15 @@ button{transition:transform .12s}.add:active,.reset:active{transform:scale(.98)}
 <div id="pans"></div>
 <button class="add" onclick="addPan()">＋ Ajouter un pan</button>
 </section>
+
 <section class="card">
-<div class="section-title">Vue 3D des pans</div>
-<div class="roof3d-card"><div id="roof3d" class="roof3d"></div><div class="roof3d-legend"><span>Modules représentés selon le nombre saisi</span><span id="roof3dCount">0 pan</span></div></div>
+<div class="section-title">Vue 2D de la toiture</div>
+<div class="roof2d-card">
+  <div id="roof2d" class="roof2d"></div>
+  <div class="roof2d-legend">Les pans sont orientés selon leur orientation saisie.</div>
+</div>
 </section>
+
 <section class="card">
 <div class="section-title">Ombrages</div>
 <div class="toggle">
@@ -113,19 +125,27 @@ function render(){
  </div>`).join("");
  document.getElementById("ombreNon").className=shade?"":"active";
  document.getElementById("ombreOui").className=shade?"active":"";
- calc();
+ render2D(); calc();
 }
 
-function render3D(){
- const box=document.getElementById("roof3d"), count=document.getElementById("roof3dCount");
+function render2D(){
+ const box=document.getElementById("roof2d");
  const active=pans.filter(p=>Number(p.n)>0 || p.o);
- count.textContent=active.length+" pan"+(active.length>1?"s":"");
- if(!active.length){box.innerHTML='<div class="roof3d-empty">Configure un pan pour afficher la toiture</div>';return;}
- box.innerHTML='<div class="roof3d-ground"></div><div class="roof3d-scene">'+active.map((p,idx)=>{
-   const n=Math.max(1,Number(p.n)||1), cells=Math.min(15,Math.max(1,Math.round(n/2)));
-   let c=""; for(let i=0;i<15;i++) c+='<div class="cell" style="opacity:'+(i<cells?1:.12)+'"></div>';
-   return '<div class="roof3d-pan"><div class="cells">'+c+'</div><div class="roof3d-label">Pan '+(idx+1)+' · '+(p.o||"—")+' · '+(p.n||0)+' mod.</div></div>';
- }).join("")+'</div>';
+ if(!active.length){box.innerHTML='<div class="roof2d-empty">Configure un pan pour afficher la toiture.</div>';return;}
+ const dirAngle={N:0,NE:45,E:90,SE:135,S:180,SO:225,O:270,NO:315};
+ box.innerHTML='<div class="roof2d-compass">N</div>'+active.map((p,i)=>{
+   const n=Math.max(1,Number(p.n)||1);
+   const visible=Math.min(15,Math.max(1,Math.round(n/2)));
+   let mods="";
+   for(let j=0;j<15;j++) mods+='<span class="module '+(j<visible?'':'off')+'"></span>';
+   const d=p.o||"—";
+   const angle=dirAngle[d]??0;
+   return `<div class="roof2d-pan" data-dir="${d}" style="transform:rotate(${angle?angle*0.015:0}deg)">
+     <div class="roof2d-title">Pan ${i+1} · ${d}</div>
+     <div class="modules">${mods}</div>
+     <div class="roof2d-info">${p.n||0} module${Number(p.n)>1?'s':''}</div>
+   </div>`;
+ }).join("");
 }
 
 function calc(){
